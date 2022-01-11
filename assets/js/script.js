@@ -45,7 +45,53 @@ var saveTasks = function() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
+// targets parent element with class "list-group", then identifies a function to express upON a click on the paragraph element within that
+$(".list-group").on("click", "p", function() {
+  // targets this(the object identified above ".list-group <p>") and isolates the text within
+  var text = $(this).text();
 
+  // creates a text area element, adds a class of "form-control", and places text variable definited above into the <textarea> element
+  var textInput = $("<textarea>")
+    .addClass("form-control")
+    .val(text);
+  
+  // replaces the ".list-group <p>" with the <textarea> created by the textInput variable
+  $(this).replaceWith(textInput);
+
+  // when textInput variable is created put it in focus
+  textInput.trigger("focus");
+});
+
+// target's parent element with class "list-group", then when user interacts with anything besides the <textarea> it activates the function
+$(".list-group").on("blur", "textarea", function() {
+  // get the object(.list-group <textarea>)'s current value/text
+  var text = $(this)
+    .val()
+    .trim();
+
+  // get the parent ul's id attribute
+  var status = $(this)
+    .closest(".list-group")
+    .attr("id")
+    .replace("list-", "");
+
+  // get the task's position in the list of other li elements
+  var index = $(this)
+    .closest(".list-group.item")
+    .index();
+
+  // tasks obj, returns array based on status, returns the obj at the given index in the array, returns the text property of the object at the given index
+  tasks[status][index].text = text;
+  saveTasks();
+
+  // recreate p element
+  var taskP = $("<p>")
+    .addClass("m-1")
+    .text(text);
+
+  // replace textarea with p element
+  $(this).replaceWith(taskP);
+});
 
 
 // modal was triggered
