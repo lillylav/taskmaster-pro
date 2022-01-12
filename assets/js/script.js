@@ -81,7 +81,7 @@ $(".list-group").on("blur", "textarea", function() {
     .index();
 
   // tasks obj, returns array based on status, returns the obj at the given index in the array, returns the text property of the object at the given index
-  // tasks[status][index].text = text;
+  tasks[status][index].text = text;
   saveTasks();
 
   // recreate p element
